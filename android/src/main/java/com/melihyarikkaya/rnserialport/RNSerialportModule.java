@@ -78,6 +78,7 @@ public class RNSerialportModule extends ReactContextBaseJavaModule {
   private UsbDeviceConnection connection;
   private UsbSerialDevice serialPort;
   private boolean serialPortConnected;
+  private ConnectionThread  connectionThread;
 
   //Connection Settings
   private int DATA_BIT     = UsbSerialInterface.DATA_BITS_8;
@@ -557,7 +558,8 @@ public class RNSerialportModule extends ReactContextBaseJavaModule {
       Intent intent = new Intent(ACTION_USB_PERMISSION_GRANTED);
       reactContext.sendBroadcast(intent);
       connection = usbManager.openDevice(device);
-      new ConnectionThread().start();
+      connectionThread = new ConnectionThread();
+      connectionThread.start();
     } else {
       connection = null;
       device = null;
